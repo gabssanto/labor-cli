@@ -2,10 +2,9 @@ import click
 from rich import print
 from datetime import datetime
 
-import api
-import config
-from sensitive_data import email, password
-from beautify import printTasks, print_reports
+from labor.api import _sign_in, _sign_out, _tasks, _reports
+from labor.config import write, load
+from labor.beautify import printTasks, print_reports
 
 @click.group()
 def cli():
@@ -16,7 +15,7 @@ def cli():
 def sign_in():
     email = click.prompt('Enter your email', type=str)
     password = click.prompt('Enter your password', type=str, hide_input=True)
-    data, status, headers = api.sign_in(email, password)
+    data, status, headers = _sign_in(email, password)
 
     saved_headers = {
         'access-token': headers['access-token'],
@@ -32,22 +31,22 @@ def sign_in():
     }
 
     if status == 200: 
-        config.write(config_json)
+        write(config_json)
         print("User logged in successfully")
     else: print("Error logging in")
 
 @cli.command(help="Logout from Labor")
 def sign_out():
-    logged_user = config.load()
+    logged_user = load()
     headers = logged_user['saved_headers']
-    status = api.sign_out(headers)
+    status = _sign_out(headers)
     if status == 200:
-        config.write({})
+        write({})
     else: 
         print('Error while signing out')
 
 
-@cli.command(help="Get tasks, default is current month, use month in numbers, default for year is current year")
+@cli.command(help="Default is current month, use month and year in numbers")
 @click.argument("month", required=False)
 @click.argument("year", required=False)
 def tasks(month, year):
@@ -56,8 +55,8 @@ def tasks(month, year):
             year = datetime.now().year
         if not month: 
             month = datetime.now().month
-        logged_user = config.load()
-        data, status, projects = api.tasks(logged_user, month, year)
+        logged_user = load()
+        data, status, projects = _tasks(logged_user, month, year)
         if status == 200: 
             print(printTasks(dict.items(data), projects))
         else: 
@@ -71,8 +70,8 @@ def reports(year):
     try: 
         if not year:
             year = datetime.now().year
-        logged_user = config.load()
-        data, status = api.reports(logged_user, year)
+        logged_user = load()
+        data, status = _reports(logged_user, year)
         if status == 200:
             print(print_reports(data))
     except:

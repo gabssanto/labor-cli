@@ -1,5 +1,4 @@
 import datetime
-import time
 
 from rich.table import Table
 from rich.text import Text
