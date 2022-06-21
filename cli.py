@@ -31,7 +31,6 @@ def login():
         'data': data,
     }
 
-    # print(data)
     if status == 200: 
         config.write(config_json)
         print("User logged in successfully")
@@ -67,19 +66,6 @@ def reports(year):
             print(print_reports(data))
     except:
         print("You need to login first")
-
-# @cli.command(help="Train station updates")
-# @click.argument("station", required=True)
-# @click.option(
-#     "-f",
-#     "--follow",
-#     is_flag=True,
-#     default=False,
-#     help="Keep watching for updates every couple of seconds",
-# )
-# def live(station, follow):
-#     commands.live(station, follow)
-
 
 if __name__ == "__main__":
     cli()

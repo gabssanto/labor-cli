@@ -16,7 +16,5 @@ months = {
 }
 
 def get_last_day_of_month(month_number, year): 
-    # month_number = months[month]
-    #! Error while selecting a custom month
     _, last_day = calendar.monthrange(int(year), int(month_number))
     return last_day

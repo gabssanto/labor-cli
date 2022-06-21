@@ -7,7 +7,6 @@ from rich.live import Live
 from rich import box, print as rich_print
 
 COLOR_GREEN = "light_green"
-COLOR_ORANGE = "sandy_brown"
 COLOR_GRAY = "gray70"
 NEWLINE = "\n"
 
@@ -42,7 +41,6 @@ def printTasks(tasks_tuple, projects):
         title_style="white bold",
         caption_style=COLOR_GRAY,
         border_style=COLOR_GRAY,
-        # row_styles=["", "dim"],
     )
 
     table.add_column("Day", style=COLOR_GREEN)
@@ -99,7 +97,6 @@ def print_reports(reports):
         title_style="white bold",
         caption_style=COLOR_GRAY,
         border_style=COLOR_GRAY,
-        # row_styles=["", "dim"],
     )
 
     table.add_column("Month", style=COLOR_GREEN)
