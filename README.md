@@ -1,6 +1,11 @@
 # labor-cli
 CLI for getLabor
 
+# Install
+```
+pip install labor
+```
+
 # Examples
 ```
 ❯ labor sign-in
