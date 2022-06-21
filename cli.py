@@ -13,10 +13,10 @@ def cli():
 
 
 @cli.command(help="Login to Labor")
-def login():
-    email = click.prompt('Enter your email', type=str)
-    password = click.prompt('Enter your password', type=str, hide_input=True)
-    data, status, headers = api.login(email, password)
+def sign_in():
+    # email = click.prompt('Enter your email', type=str)
+    # password = click.prompt('Enter your password', type=str, hide_input=True)
+    data, status, headers = api.sign_in(email, password)
 
     saved_headers = {
         'access-token': headers['access-token'],
@@ -35,6 +35,17 @@ def login():
         config.write(config_json)
         print("User logged in successfully")
     else: print("Error logging in")
+
+@cli.command(help="Logout from Labor")
+def sign_out():
+    logged_user = config.load()
+    headers = logged_user['saved_headers']
+    status = api.sign_out(headers)
+    if status == 200:
+        config.write({})
+    else: 
+        print('Error while signing out')
+
 
 @cli.command(help="Get tasks, default is current month, use month in numbers, default for year is current year")
 @click.argument("month", required=False)

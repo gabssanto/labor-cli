@@ -23,10 +23,15 @@ def _request(url, logged_user):
     update_header_interceptor(logged_user, res.headers)
     return res
 
-def login(email, password):
+def sign_in(email, password):
     url = BASE_URL + "auth/sign_in"
     res = httpx.post(url, json={"email": email, "password": password})
     return json.loads(res.text)['data'], res.status_code, res.headers
+
+def sign_out(headers):
+    url = BASE_URL + "auth/sign_out"
+    res = httpx.delete(url, headers=headers)
+    return res.status_code
 
 def tasks(logged_user, month, year):
     user_id = logged_user["data"]["id"]
