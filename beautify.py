@@ -109,13 +109,14 @@ def print_reports(reports):
 
     current_month = len(reports)
     for report in reports:
+        sub_total = report['duration'] / 1000 / 60 / 60 * report['hour_value']
         table.add_row(
             f"{current_month}",
             convert_seconds_to_hours(report['duration'] / 1000),
             trunc_numbers(report['hour_value']),
-            "",
+            trunc_numbers(sub_total),
             trunc_numbers(report['current_discount']),
-            "",
+            trunc_numbers(sub_total - report['current_discount']),
             has_sent_nfe(report['invoice'])
 
         )
