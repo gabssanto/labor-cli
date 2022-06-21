@@ -14,8 +14,8 @@ def cli():
 
 @cli.command(help="Login to Labor")
 def sign_in():
-    # email = click.prompt('Enter your email', type=str)
-    # password = click.prompt('Enter your password', type=str, hide_input=True)
+    email = click.prompt('Enter your email', type=str)
+    password = click.prompt('Enter your password', type=str, hide_input=True)
     data, status, headers = api.sign_in(email, password)
 
     saved_headers = {
