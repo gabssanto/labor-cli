@@ -7,6 +7,7 @@ from rich import box, print as rich_print
 
 COLOR_GREEN = "light_green"
 COLOR_GRAY = "gray70"
+COLOR_BLUE = "blue"
 NEWLINE = "\n"
 
 def format_day(date): 
@@ -27,13 +28,13 @@ def format_to_hours(date_str):
     hour, minute, seconds = hours_template.split('.')[0].split(':')
     return f"{hour}:{minute}:{seconds}"
 
-def trunc_numbers(number): 
+def trunc_numbers(number):
     return "R$ " + str("{:.2f}".format(number))
 
 def match_project(project_id, projects): 
     return next((project for project in projects if str(project["id"]) == str(project_id)), None)
 
-def printTasks(tasks_tuple, projects): 
+def printTasks(tasks_tuple, projects, wage): 
     table = Table(
         title="Month Tasks",
         box=box.DOUBLE_EDGE,
@@ -42,6 +43,7 @@ def printTasks(tasks_tuple, projects):
         border_style=COLOR_GRAY,
     )
 
+    table.add_column("Id", style=COLOR_BLUE)
     table.add_column("Day", style=COLOR_GREEN)
     table.add_column("Project", style=COLOR_GREEN)
     table.add_column("Description", style=COLOR_GRAY)
@@ -50,15 +52,22 @@ def printTasks(tasks_tuple, projects):
     table.add_column("Duration")
     table.add_column("Cost (R$)")
     
-    wage = 0
-
+    ids = []
+    wage_sum = 0
     for date, tasks in tasks_tuple:
-        for task in tasks["tasks"]: 
+        for task in tasks["tasks"]:
+            if task['id'] in ids:
+                continue
+            ids.append(task['id'])
             start = task['start']
             end = task['end']
+            form = '%H:%M:%S'
+            duration_wage = (datetime.datetime.strptime(end[11:-10],form) - datetime.datetime.strptime(start[11:-10],form)).seconds / 3600
             duration = format_to_date(end) - format_to_date(start)
+            task['cost'] = wage * float(duration_wage)
             project = match_project(task['project_id'], projects)
             table.add_row(
+                str(task['id']),
                 format_day(date),
                 f"[{project['tag_color']}]{project['name']}",
                 task['description'],
@@ -67,15 +76,16 @@ def printTasks(tasks_tuple, projects):
                 str(duration),
                 f"[light_green]{trunc_numbers(task['cost'])}"
             )
-            wage = wage + task['cost']
+            wage_sum = wage_sum + task['cost']
     table.add_row(
         "",
         "",
         "",
         "",
         "",
+        "",
         "[green]Total:",
-        f"[green]{trunc_numbers(wage)}"
+        f"[green]{trunc_numbers(wage_sum)}"
     )
     return table
 

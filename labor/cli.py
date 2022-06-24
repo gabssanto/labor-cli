@@ -2,7 +2,7 @@ import click
 from rich import print
 from datetime import datetime
 
-from labor.api import _sign_in, _sign_out, _tasks, _reports
+from labor.api import _sign_in, _sign_out, _tasks, _reports, _wage
 from labor.config import write, load
 from labor.beautify import printTasks, print_reports
 
@@ -57,12 +57,13 @@ def tasks(month, year):
             month = datetime.now().month
         logged_user = load()
         data, status, projects = _tasks(logged_user, month, year)
-        if status == 200: 
-            print(printTasks(dict.items(data), projects))
+        wage, wage_status = _wage(logged_user)
+        if status == 200 and wage_status == 200: 
+            print(printTasks(dict.items(data), projects, wage))
         else: 
             print(f"Error while retrieving data: {status}")
-    except: 
-        print("You need to login first")
+    except OSError: 
+        print(f"You need to login first, error: {OSError}")
 
 @cli.command(help="Get reports")
 @click.argument("year", required=False)
