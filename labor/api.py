@@ -40,6 +40,11 @@ def _tasks(logged_user, month, year):
     res = _request(url, logged_user)
     return json.loads(res.text), res.status_code, json.loads(projects.text)
 
+def _wage(logged_user):
+    user_id = logged_user["data"]["id"]
+    res = _request(f"{BASE_URL}" + f"users/{user_id}", logged_user)
+    return json.loads(res.text)['current_hour_value'], res.status_code
+
 def _reports(logged_user, year):
     res = _request(BASE_URL + f'reports?&year={year}', logged_user)
     return json.loads(res.text), res.status_code
