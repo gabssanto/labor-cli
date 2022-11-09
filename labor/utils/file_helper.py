@@ -84,6 +84,8 @@ class FileHelper:
             bool
         """
 
+        path = os.path.expanduser(path)
+
         if not self.exists(path):
             self.mkdir(path)
 

@@ -23,9 +23,6 @@ class LoginService:
 
     def __update_header_interceptor(self, headers):
 
-        if headers.get('access-token'):
-            return None
-
         headers = {
             'access-token': headers['access-token'],
             'client': headers['client'],
@@ -46,9 +43,12 @@ class LoginService:
     @logged_user.setter
     def logged_user(self, logged_user: dict):
 
-        self.__config.set(
-                self.__logged_user_key
+        self.__config.put(
+                self.__logged_user_key,
+                logged_user
                 )
+
+        self.__config.write()
 
     def __do_request(self,
                      url_path, 
@@ -65,7 +65,7 @@ class LoginService:
                 headers=headers
                 )
 
-        if response.status_code == 200 and intercept:
+        if intercept and response.status_code == 200:
             self.__update_header_interceptor(response.headers)
 
         return response
