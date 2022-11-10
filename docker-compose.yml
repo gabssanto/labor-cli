@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+
+  labor.main:
+    image: labor:latest
+    build: .
+    volumes:
+      - ./:/var/lib/labor
+      - ~/.labor:/root/.labor
