@@ -11,22 +11,7 @@ import click
 
 from labor.services.login import LoginService 
 from labor.utils.alert import AlertUtil
-
-class Screen:
-
-    @classmethod
-    def clean(cls):
-
-        os.system('clear')
-
-    @classmethod
-    def show_banner(cls):
-        cls.clean()
-
-        f = open('./labor/banner.txt')
-
-        print('\n\n', f.read(), '\n\n')
-
+from labor.utils.screen import Screen
 
 class LoginController:
 
@@ -38,9 +23,9 @@ class LoginController:
 
         Screen.show_banner()
 
-        email = click.prompt(AlertUtil.paint('Enter your email', 'blue'), type=str)
+        email = click.prompt(AlertUtil.paint('Enter your email', 'cyan'), type=str)
         password = click.prompt(
-                AlertUtil.paint('Enter your password', 'blue'), 
+                AlertUtil.paint('Enter your password', 'cyan'), 
                 type=str,
                 hide_input=True)
 

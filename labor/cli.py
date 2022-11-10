@@ -6,6 +6,11 @@ from labor.api import _sign_in, _sign_out, _tasks, _reports, _wage
 from labor.config import write, load
 from labor.beautify import printTasks, print_reports
 
+from click.exceptions import Abort
+from labor.controllers.login import LoginController
+from labor.controllers.tasks import TasksController
+from labor.utils.screen import Screen
+
 @click.group()
 def cli():
     ...
@@ -13,27 +18,15 @@ def cli():
 
 @cli.command(help="Login to Labor")
 def sign_in():
-    email = click.prompt('Enter your email', type=str)
-    password = click.prompt('Enter your password', type=str, hide_input=True)
-    data, status, headers = _sign_in(email, password)
+    try:
+        LoginController().sign_in()
+    except Abort:
+        Screen.goodbye_message()
 
-    saved_headers = {
-        'access-token': headers['access-token'],
-        'client': headers['client'],
-        'expiry': headers['expiry'],
-        'uid': headers['uid'],
-        'token-type': headers['token-type']
-    }
 
-    config_json = {
-        'saved_headers': saved_headers,
-        'data': data,
-    }
-
-    if status == 200: 
-        write(config_json)
-        print("User logged in successfully")
-    else: print("Error logging in")
+@cli.command(help="Show opened tasks")
+def opened():
+    TasksController().opened_task()
 
 @cli.command(help="Logout from Labor")
 def sign_out():

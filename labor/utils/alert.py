@@ -6,6 +6,8 @@ Created on Wed Nov 09 14:18:23 2022
 @author ccavalcante
 """
 
+import json
+
 from colorama import init
 from termcolor import colored
 
@@ -47,3 +49,12 @@ class AlertUtil:
     def warn(cls, message):
         
         cls.__print(message, 'yellow')
+
+    @classmethod
+    def print_json(cls, json_dict):
+
+        print(json.dumps(
+                json_dict,
+                indent=2
+                )
+              )

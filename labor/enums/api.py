@@ -19,3 +19,4 @@ class LaborApiEnum(str, Enum):
     TASKS = "tasks"
     USERS = "users"
     REPORTS = "reports"
+    OPENED = "opened"

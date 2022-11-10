@@ -1,5 +1,8 @@
 
+import fortune
+from click.exceptions import Abort
 from labor.controllers.login import LoginController
+from labor.utils.screen import Screen
 
 def main():
 
@@ -7,5 +10,8 @@ def main():
     
 if __name__ == '__main__':
 
-    main()
+    try:
+        main()
+    except Abort:
 
+        Screen.goodbye_message()
