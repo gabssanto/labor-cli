@@ -1,10 +1,10 @@
 import click
-from rich import print
+from rich import print as rich_print
 from datetime import datetime
 
-from labor.api import _sign_in, _sign_out, _tasks, _reports, _wage
-from labor.config import write, load
-from labor.beautify import printTasks, print_reports
+from api import _sign_in, _sign_out, _tasks, _reports, _wage
+from config import write, load
+from beautify import printTasks, print_reports
 
 
 @click.group()
@@ -33,9 +33,9 @@ def sign_in():
 
     if status == 200:
         write(config_json)
-        print("User logged in successfully")
+        rich_print("User logged in successfully")
     else:
-        print("Error logging in")
+        rich_print("Error logging in")
 
 
 @cli.command(help="Logout from Labor")
@@ -46,7 +46,7 @@ def sign_out():
     if status == 200:
         write({})
     else:
-        print('Error while signing out')
+        rich_print('Error while signing out')
 
 
 @cli.command(help="Default is current month, use month and year in numbers")
@@ -62,11 +62,11 @@ def tasks(month, year):
         data, status, projects = _tasks(logged_user, month, year)
         wage, wage_status = _wage(logged_user)
         if status == 200 and wage_status == 200:
-            print(printTasks(dict.items(data), projects, wage))
+            rich_print(printTasks(dict.items(data), projects, wage))
         else:
-            print(f"Error while retrieving data: {status}")
+            rich_print(f"Error while retrieving data: {status}")
     except OSError:
-        print(f"You need to login first, error: {OSError}")
+        rich_print(f"You need to login first, error: {OSError}")
 
 
 @cli.command(help="Get reports")
@@ -78,9 +78,9 @@ def reports(year):
         logged_user = load()
         data, status = _reports(logged_user, year)
         if status == 200:
-            print(print_reports(data))
+            rich_print(print_reports(data))
     except:
-        print("You need to login first")
+        rich_print("You need to login first")
 
 
 if __name__ == "__main__":

@@ -10,17 +10,21 @@ COLOR_GRAY = "gray70"
 COLOR_BLUE = "blue"
 NEWLINE = "\n"
 
-def format_day(date): 
+
+def format_day(date):
     _, _, day = date.split('-')
     return day
+
 
 def format_to_date(date_str):
     datum, hours = date_str.split('T')
     year, month, day = datum.split('-')
     hours_template, _ = hours.split('-')
     hour, minute, second = hours_template.split('.')[0].split(':')
-    date = datetime.datetime(int(year), int(month), int(day), int(hour), int(minute), int(second))
+    date = datetime.datetime(int(year), int(month), int(
+        day), int(hour), int(minute), int(second))
     return date
+
 
 def format_to_hours(date_str):
     _, hours = date_str.split('T')
@@ -28,13 +32,16 @@ def format_to_hours(date_str):
     hour, minute, seconds = hours_template.split('.')[0].split(':')
     return f"{hour}:{minute}:{seconds}"
 
+
 def trunc_numbers(number):
     return "R$ " + str("{:.2f}".format(number))
 
-def match_project(project_id, projects): 
+
+def match_project(project_id, projects):
     return next((project for project in projects if str(project["id"]) == str(project_id)), None)
 
-def printTasks(tasks_tuple, projects, wage): 
+
+def printTasks(tasks_tuple, projects, wage):
     table = Table(
         title="Month Tasks",
         box=box.DOUBLE_EDGE,
@@ -43,7 +50,7 @@ def printTasks(tasks_tuple, projects, wage):
         border_style=COLOR_GRAY,
     )
 
-    table.add_column("Id", style=COLOR_BLUE)
+    table.add_column("ID", style=COLOR_BLUE)
     table.add_column("Day", style=COLOR_GREEN)
     table.add_column("Project", style=COLOR_GREEN)
     table.add_column("Description", style=COLOR_GRAY)
@@ -51,7 +58,7 @@ def printTasks(tasks_tuple, projects, wage):
     table.add_column("End", style=COLOR_GRAY)
     table.add_column("Duration")
     table.add_column("Cost (R$)")
-    
+
     ids = []
     wage_sum = 0
     duration_sum = datetime.timedelta()
@@ -62,11 +69,8 @@ def printTasks(tasks_tuple, projects, wage):
             ids.append(task['id'])
             start = task['start']
             end = task['end']
-            form = '%H:%M:%S'
-            duration_wage = (datetime.datetime.strptime(end[11:-10],form) - datetime.datetime.strptime(start[11:-10],form)).seconds / 3600
             duration = format_to_date(end) - format_to_date(start)
             duration_sum = duration_sum + duration
-            task['cost'] = wage * float(duration_wage)
             project = match_project(task['project_id'], projects)
             table.add_row(
                 str(task['id']),
@@ -91,17 +95,20 @@ def printTasks(tasks_tuple, projects, wage):
     )
     return table
 
-def convert_seconds_to_hours(seconds): 
+
+def convert_seconds_to_hours(seconds):
     m, s = divmod(seconds, 60)
     h, m = divmod(m, 60)
     return "%02i:%02i:%02i" % (h, m, s)
 
-def has_sent_nfe(invoice): 
+
+def has_sent_nfe(invoice):
     if invoice['id'] == None:
         return "[red]:heavy_check_mark:"
     return f"[{COLOR_GREEN}]:heavy_check_mark:"
 
-def print_reports(reports): 
+
+def print_reports(reports):
     table = Table(
         title="Reports",
         box=box.DOUBLE_EDGE,
@@ -135,12 +142,13 @@ def print_reports(reports):
 
     return table
 
+
 def strfdelta(tdelta, fmt='{D:02}d {H:02}h {M:02}m {S:02}s', inputtype='timedelta'):
     """Convert a datetime.timedelta object or a regular number to a custom-
     formatted string, just like the stftime() method does for datetime.datetime
     objects.
 
-    The fmt argument allows custom formatting to be specified.  Fields can 
+    The fmt argument allows custom formatting to be specified.  Fields can
     include seconds, minutes, hours, days, and weeks.  Each field is optional.
 
     Some examples:
@@ -149,12 +157,12 @@ def strfdelta(tdelta, fmt='{D:02}d {H:02}h {M:02}m {S:02}s', inputtype='timedelt
         '{D:2}d {H:2}:{M:02}:{S:02}'      --> ' 5d  8:04:02'
         '{H}h {S}s'                       --> '72h 800s'
 
-    The inputtype argument allows tdelta to be a regular number instead of the  
-    default, which is a datetime.timedelta object.  Valid inputtype strings: 
-        's', 'seconds', 
-        'm', 'minutes', 
-        'h', 'hours', 
-        'd', 'days', 
+    The inputtype argument allows tdelta to be a regular number instead of the
+    default, which is a datetime.timedelta object.  Valid inputtype strings:
+        's', 'seconds',
+        'm', 'minutes',
+        'h', 'hours',
+        'd', 'days',
         'w', 'weeks'
     """
 

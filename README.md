@@ -35,9 +35,9 @@ Commands:
 ❯ poetry build
 ```
 
-## Local install
+## Local run
 ```
-❯ poetry install
+❯ python3 labor/cli.py <command>
 ```
 
 ## Publish
