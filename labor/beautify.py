@@ -118,28 +118,39 @@ def print_reports(reports):
     )
 
     table.add_column("Month", style=COLOR_GREEN)
+    table.add_column("NF-e")
     table.add_column("Total Hours", style=COLOR_GRAY)
     table.add_column("Hour Value", style=COLOR_GRAY)
     table.add_column("Sub Total", style=COLOR_GRAY)
     table.add_column("Discount", style=COLOR_GRAY)
     table.add_column("Final Value", style=COLOR_GRAY)
-    table.add_column("NF-e")
 
     current_month = len(reports)
+    year_total = 0
     for report in reports:
         sub_total = report['duration'] / 1000 / 60 / 60 * report['hour_value']
+        total = sub_total - report['current_discount']
         table.add_row(
             f"{current_month}",
+            has_sent_nfe(report['invoice']),
             convert_seconds_to_hours(report['duration'] / 1000),
             trunc_numbers(report['hour_value']),
             trunc_numbers(sub_total),
             trunc_numbers(report['current_discount']),
-            trunc_numbers(sub_total - report['current_discount']),
-            has_sent_nfe(report['invoice'])
+            trunc_numbers(total)
 
         )
         current_month = current_month - 1
-
+        year_total = year_total + total
+    table.add_row(
+        "",
+        "",
+        "",
+        "",
+        "",
+        "[green]Total:",
+        f"[green]{trunc_numbers(year_total)}"
+    )
     return table
 
 
