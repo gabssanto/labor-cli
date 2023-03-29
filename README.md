@@ -24,8 +24,23 @@ Options:
   --help  Show this message and exit.
 
 Commands:
-  reports   Get reports
+  reports   Get reports, default is current year, use year in numbers
   sign-in   Login to Labor
   sign-out  Logout from Labor
   tasks     Default is current month, use month and year in numbers
+```
+
+# Development
+```
+❯ poetry build
+```
+
+## Local install
+```
+❯ poetry install
+```
+
+## Publish
+```
+❯ poetry publish --build
 ```

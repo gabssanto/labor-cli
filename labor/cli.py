@@ -6,6 +6,7 @@ from labor.api import _sign_in, _sign_out, _tasks, _reports, _wage
 from labor.config import write, load
 from labor.beautify import printTasks, print_reports
 
+
 @click.group()
 def cli():
     ...
@@ -30,10 +31,12 @@ def sign_in():
         'data': data,
     }
 
-    if status == 200: 
+    if status == 200:
         write(config_json)
         print("User logged in successfully")
-    else: print("Error logging in")
+    else:
+        print("Error logging in")
+
 
 @cli.command(help="Logout from Labor")
 def sign_out():
@@ -42,7 +45,7 @@ def sign_out():
     status = _sign_out(headers)
     if status == 200:
         write({})
-    else: 
+    else:
         print('Error while signing out')
 
 
@@ -53,22 +56,23 @@ def tasks(month, year):
     try:
         if not year:
             year = datetime.now().year
-        if not month: 
+        if not month:
             month = datetime.now().month
         logged_user = load()
         data, status, projects = _tasks(logged_user, month, year)
         wage, wage_status = _wage(logged_user)
-        if status == 200 and wage_status == 200: 
+        if status == 200 and wage_status == 200:
             print(printTasks(dict.items(data), projects, wage))
-        else: 
+        else:
             print(f"Error while retrieving data: {status}")
-    except OSError: 
+    except OSError:
         print(f"You need to login first, error: {OSError}")
+
 
 @cli.command(help="Get reports")
 @click.argument("year", required=False)
 def reports(year):
-    try: 
+    try:
         if not year:
             year = datetime.now().year
         logged_user = load()
@@ -77,6 +81,7 @@ def reports(year):
             print(print_reports(data))
     except:
         print("You need to login first")
+
 
 if __name__ == "__main__":
     cli()

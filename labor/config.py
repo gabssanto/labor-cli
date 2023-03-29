@@ -1,9 +1,23 @@
 import json
+import os
 
-def write(json_file): 
-    with open('config.json', 'w') as file:
+
+def get_config_path():
+    # Current path
+    path = os.path.dirname(os.path.abspath(__file__))
+    # New path
+    return os.path.join(path, 'config.json')
+
+
+def write(json_file):
+    config_path = get_config_path()
+
+    with open(config_path, 'w') as file:
         json.dump(json_file, file)
 
+
 def load():
-    with open('config.json', 'r') as file:
+    config_path = get_config_path()
+
+    with open(config_path, 'r') as file:
         return json.load(file)
