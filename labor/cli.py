@@ -83,5 +83,14 @@ def reports(year):
         rich_print("You need to login first")
 
 
+# Labor add <project> <start> <end> <day> <description>
+@cli.command(help="Add a new task")
+def add():
+    try:
+        rich_print("Add a new task")
+    except:
+        rich_print("You need to login first")
+
+
 if __name__ == "__main__":
     cli()
