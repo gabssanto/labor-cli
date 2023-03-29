@@ -83,11 +83,38 @@ def reports(year):
         rich_print("You need to login first")
 
 
+# Labor projects
+@cli.command(help="List all projects")
+def projects():
+    try:
+        rich_print("List all projects")
+    except:
+        rich_print("You need to login first")
+
+
 # Labor add <project> <start> <end> <day> <description>
 @cli.command(help="Add a new task")
 def add():
     try:
         rich_print("Add a new task")
+    except:
+        rich_print("You need to login first")
+
+
+# Labor edit <task_id> <project> <start> <end> <day> <description>
+@cli.command(help="Edit a task")
+def edit():
+    try:
+        rich_print("Edit a task")
+    except:
+        rich_print("You need to login first")
+
+
+# Labor delete <task_id>
+@cli.command(help="Delete a task by ID")
+def delete():
+    try:
+        rich_print("Delete a task by ID")
     except:
         rich_print("You need to login first")
 
